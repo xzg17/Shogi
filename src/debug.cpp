@@ -11,15 +11,7 @@ typedef struct {
 
 static int Board_init(Py_Class_Board *self, PyObject *args);
 
-static PyObject *my_debug(Py_Class_Board *self, void *closure) {
-    // Your function implementation here
-    Py_INCREF(Py_None);
-    return Py_None;
-};
-
-
 static PyMethodDef Py_Class_Board_methods[] = {
-    {"debug", (PyCFunction)my_debug, METH_NOARGS, "(x_x)"},
     {NULL} /* Sentinel */
 };
 
@@ -66,18 +58,18 @@ static PyTypeObject CustomType = {
 };
 
 
-static int Board_init(Py_Class_Board *self, PyObject *args) {
-    if (args != NULL) {
+static int Board_init(Py_Class_Board *self, PyObject *args){
+    if(args != NULL){
         PyErr_SetString(PyExc_ValueError, "InitError1!");
         return -1;
-    }
+    };
 
     self->board = new Board(); // Allocate memory for a new Board object
 
-    if (!self->board) {
+    if(!(self->board)){
         PyErr_SetString(PyExc_MemoryError, "Failed to allocate memory for Board object");
         return -1;
-    }
+    };
 
     return 0;
 };
