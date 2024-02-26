@@ -67,7 +67,7 @@ static int Board_init(Py_Class_Board *self, PyObject *args){
         PyErr_SetString(PyExc_ValueError, "InitError1!");
         return -1;
     };
-    self->board=new Board();
+    self->board = new Board();
     return 0;
 };
 
