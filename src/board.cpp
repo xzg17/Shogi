@@ -25,15 +25,12 @@ static PyObject *my_debug(Py_Class_Board *self);
 static PyMethodDef Py_Class_Board_methods[] = {
     {"ply", (PyCFunction)Board_ply, METH_VARARGS, "(^o^)v"},
     {"moves", (PyCFunction)Board_moves, METH_VARARGS, "(ToT)"},
-    {"set_tesu", (PyCFunction)set_tesu, METH_VARARGS, "(^o^)v"},
-    {"catch_or_moves", (PyCFunction)catch_or_moves, METH_VARARGS, "(ToT)/\(^o^)v"},
-    {"rotate", (PyCFunction)rotate_board, METH_VARARGS, "(^q^)"},
-    {"push", (PyCFunction)push_move, METH_VARARGS, "(O_O)"},
-    {"pushed", (PyCFunction)pushed_board, METH_VARARGS, "{O_O}"},
-    {"is_end", (PyCFunction)is_end, METH_VARARGS, "\(-A-)/"},
-    {"get_info", (PyCFunction)get_information, METH_VARARGS, "v(^o^)"},
-    {"get_board", (PyCFunction)get_board, METH_VARARGS, "v(^o^)"},
-    {"next_player", (PyCFunction)next_player, METH_VARARGS, "(-_-)?"},
+    {"push", (PyCFunction)Board_push, METH_VARARGS, "(^o^)v"},
+    {"pop", (PyCFunction)Board_pop, METH_VARARGS, "(ToT)/\(^o^)v"},
+    {"is_checked", (PyCFunction)Board_is_checked, METH_VARARGS, "{O_O}"},
+    {"turn", (PyCFunction)Board_turn, METH_VARARGS, "\(-A-)/"},
+    {"history", (PyCFunction)Board_history, METH_VARARGS, "v(^o^)"},
+    {"is_end", (PyCFunction)is_end, METH_VARARGS, "v(^o^)"},
     //{"debug", (PyCFunction)my_debug, METH_VARARGS, "(x_x)"},
     {NULL} /* Sentinel */
 };
