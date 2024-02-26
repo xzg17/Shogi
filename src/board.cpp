@@ -13,15 +13,14 @@ typedef struct {
 static PyObject *Board_ply(Py_Class_Board *self);
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args);
 static PyObject *Board_pop(Py_Class_Board *self);
-static PyObject *Board_is_check_bking(Py_Class_Board *self);
-static PyObject *Board_is_check_wking(Py_Class_Board *self);
+static PyObject *Board_is_checked(Py_Class_Board *self);
 static PyObject *Board_turn(Py_Class_Board *self);
 static PyObject *Board_history(Py_Class_Board *self);
 static PyObject *is_end(Py_Class_Board *self);
 static PyObject *my_debug1(Py_Class_Board *self);
 
 
-static int *Dummy_init(Py_Class_Board *self, PyObject *args);
+static int *Board_init(Py_Class_Board *self, PyObject *args);
 static PyObject *Board_str(Py_Class_Board *self);
 
 static PyObject *my_debug1(Py_Class_Board *self){
@@ -91,69 +90,74 @@ static PyTypeObject CustomType = {
 static PyObject *Board_ply(Py_Class_Board *self){
     return Py_BuildValue("i", self->board->ply());
 };
+
+static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
+    PyObject *move;
+    if(!PyArg_ParseTuple(args, "O", &move)){
+        PyErr_SetString(PyExc_ValueError, "PushError1!");
+        return NULL;
+    };
+    if(PyList_Check(pyboard)){
+        if(PyList_Size(pyboard)!=3){
+            PyErr_SetString(PyExc_ValueError, "InitError_list2!");
+            return NULL;
+        }
+        int c_move[3]={
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 0)),
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 1)),
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 2))
+        };
+        self->board->push(move);
+    };
+    if(PyTuple_Check(pyboard)){
+        if(PyTuple_Size(pyboard)!=3){
+            PyErr_SetString(PyExc_ValueError, "InitError_list2!");
+            return NULL;
+        }
+        int c_move[3]={
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 0)),
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 1)),
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 2))
+        };
+        self->board->push(move);
+    };
+    Py_INCREF(Py_None);
+    return Py_None;
+};
+
+static PyObject *Board_pop(Py_Class_Board *self){
+    int *c_move = self->board->pop();
+    return Py_BuildValue("(iii)", c_move[0], c_move[1], c_move[2]);
+};
+
+static PyObject *Board_is_checked(Py_Class_Board *self){
+    if(self->board->turn == 1){
+        return Py_BuildValue("i", self->board->is_check_bking());
+    }else if(self->board->turn == -1){
+        return Py_BuildValue("i", self->board->is_check_wking());
+    }
+    return Py_BuildValue("i", -1);
+};
+
+static PyObject *Board_turn(Py_Class_Board *self){
+    return Py_BuildValue("i", self->board->turn);
+};
+
+static PyObject *Board_history(Py_Class_Board *self){
+    std::stack<int*> c_history = self->board->history;
+    int m = c_history.size();
+    PyObject *py_history = PyList_New(m);
+    for(int i=0;i<m;i++){
+        int *c_move = c_history.top();
+        c_history.pop();
+        PyObject *move = Py_BuildValue("(iii)", c_move[0], c_move[1], c_move[2]);
+        PyList_SET_ITEM(py_history, i, move);
+    }
+    return py_history;
+};
 //一旦ここまで
-static PyObject *Board_push(Py_Class_Board *self, PyObject *args);
-static PyObject *Board_pop(Py_Class_Board *self);
-static PyObject *Board_is_check_bking(Py_Class_Board *self);
-static PyObject *Board_is_check_wking(Py_Class_Board *self);
-static PyObject *Board_turn(Py_Class_Board *self);
-static PyObject *Board_history(Py_Class_Board *self);
 static PyObject *is_end(Py_Class_Board *self);
 static PyObject *my_debug1(Py_Class_Board *self);
-
-static PyObject *push_move(Py_Class_Board *self, PyObject *args){
-    int move;
-    if (!PyArg_ParseTuple(args, "i", &move)) {
-        PyErr_SetString(PyExc_ValueError, "PushError1!");
-        return NULL;
-    };
-    self->board->push(move);
-    Py_INCREF(Py_None);
-    return Py_None;
-};
-
-
-static PyObject *get_tesu(Py_Class_Board *self){
-    return Py_BuildValue("i", self->board->tesu);
-};
-
-static PyObject *set_tesu(Py_Class_Board *self, PyObject *args){
-    int tesu;
-    if (!PyArg_ParseTuple(args, "i", &tesu)) {
-        PyErr_SetString(PyExc_ValueError, "SetError1!");
-        return NULL;
-    };
-    self->board->tesu = tesu;
-    Py_INCREF(Py_None);
-    return Py_None;
-};
-
-//*
-static PyObject *pushed_board(Py_Class_Board *self, PyObject *args){
-    int move;
-    if (!PyArg_ParseTuple(args, "i", &move)) {
-        PyErr_SetString(PyExc_ValueError, "PushError1!");
-        return NULL;
-    };
-    Board child=self->board->pushed(move);
-    return Py_BuildValue(
-        "(iiiiiiiiiiiiii)",
-        child.board[0],
-        child.board[1],
-        child.board[2],
-        child.board[3],
-        child.board[4],
-        child.board[5],
-        child.board[6],
-        child.board[7],
-        child.board[8],
-        child.board[9],
-        child.board[10],
-        child.board[11],
-        child.board[12],
-        child.board[13]
-    );
-};
 //*/
 static PyObject *is_end(Py_Class_Board *self){
     return Py_BuildValue("i", self->board->is_end());
@@ -265,10 +269,6 @@ static int *Dummy_init(Py_Class_Board *self, PyObject *args){
     }
     return 0;
 };
-static PyObject *Board_str(Py_Class_Board *self){
-    return PyUnicode_FromFormat(self->board->to_string().c_str());
-};
-
 
 static PyModuleDef custommodule = {
     PyModuleDef_HEAD_INIT,
@@ -295,103 +295,6 @@ PyInit_np_nd_DIDS(void){
     PyModule_AddObject(m, "DIBoard", (PyObject *) &CustomType);
 
     return m;
-}
-//*
-static PyObject *Board_moves(Py_Class_Board *self){
-    int board[14]={
-        self->board->board[0],
-        self->board->board[1],
-        self->board->board[2],
-        self->board->board[3],
-        self->board->board[4],
-        self->board->board[5],
-        self->board->board[6],
-        self->board->board[7],
-        self->board->board[8],
-        self->board->board[9],
-        self->board->board[10],
-        self->board->board[11],
-        self->board->board[12],
-        self->board->board[13]
-    };
-    int moves[48];
-    int i,j,m;
-    m=0;
-    for(i=0;i<14;i++){
-        int p=board[i];
-        if(0<p){
-            if(p<3){
-                if(p==1){
-                    for(j=0;j<13;j++){
-                        p=lion[i][j];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                moves[m]=i*14+p;
-                                m++;
-                            }
-                        }else{
-                            break;
-                        }
-                    };
-                }else{
-                    for(j=0;j<4;j++){
-                        p=jiraffe[i][j];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                moves[m]=i*14+p;
-                                m++;
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }else{
-                if(5-p){
-                    if(4-p){
-                        for(j=0;j<4;j++){
-                            p=elephant[i][j];
-                            if(p+1){
-                                if((board[p]<=0)){
-                                    moves[m]=i*14+p;
-                                    m++;
-                                }
-                            }else{
-                                break;
-                            }
-                        }
-                    }else{
-                        p=chick[i][0];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                moves[m]=i*14+p;
-                                m++;
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }else{
-                    for(j=0;j<6;j++){
-                        p=hen[i][j];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                moves[m]=i*14+p;
-                                m++;
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    PyObject *move_list = PyList_New(m);
-    for(int i=0;i<m;i++){
-        PyList_SET_ITEM(move_list, i, PyLong_FromLong((long)moves[i]));
-    }
-    return move_list;
 };
 
 static PyObject *catch_moves(Py_Class_Board *self){
