@@ -62,10 +62,10 @@ static PyTypeObject CustomType = {
 };
 
 
-static int *Board_init(Py_Class_Board *self, PyObject *args){
+static int Board_init(Py_Class_Board *self, PyObject *args){
     if(args != NULL){
         PyErr_SetString(PyExc_ValueError, "InitError1!");
-        return NULL;
+        return -1;
     };
     self->board=new Board();
     return 0;
