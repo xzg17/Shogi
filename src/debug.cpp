@@ -9,7 +9,7 @@ typedef struct {
         Board *board;
 } Py_Class_Board;
 
-static int *Board_init(Py_Class_Board *self, PyObject *args);
+static int Board_init(Py_Class_Board *self, PyObject *args);
 
 static PyObject *my_debug(Py_Class_Board *self);
 
