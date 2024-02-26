@@ -11,14 +11,14 @@ typedef struct {
 
 static int Board_init(Py_Class_Board *self, PyObject *args);
 
-static PyObject *my_debug(Py_Class_Board *self){
+static PyObject *my_debug(Py_Class_Board *self, PyObject *args){
     Py_INCREF(Py_None);
     return Py_None;
 };
 
 
 static PyMethodDef Py_Class_Board_methods[] = {
-    {"debug", (PyCFunction)my_debug, METH_VARARGS, "(x_x)"},
+    {"debug", (PyCFunction)my_debug, METH_NOARGS, "(x_x)"},
     {NULL} /* Sentinel */
 };
 
@@ -78,14 +78,14 @@ static int Board_init(Py_Class_Board *self, PyObject *args){
 //一旦ここまで
 static PyModuleDef custommodule = {
     PyModuleDef_HEAD_INIT,
-    "Board",
+    "_board",
     "Example module that creates an extension type.",
     -1,
     NULL
 };
 
 PyMODINIT_FUNC
-PyInit_Board(void){
+PyInit__board(void){
     PyObject *m;
     
     m = PyModule_Create(&custommodule);
