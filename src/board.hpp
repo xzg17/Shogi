@@ -10,7 +10,8 @@ class Board{
     int hand[14];
     std::stack<int*> history;//棋譜
     std::stack<int> get_pieces;//pop用補助
-    Board(int *position){
+    public:
+    Board(){
         //board[0～10] 空欄
         //board[11～99] 盤面
         //turn 手番
