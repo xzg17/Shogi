@@ -5,7 +5,7 @@ os.environ['CC'] = 'gcc'
 
 src_dir = 'src'
 
-ext_modules.append(Extension('Board',[src_dir + '/Board.cpp']))
+ext_modules.append(Extension('Board',[src_dir + '/board.cpp']))
 setup(
   name='Board',
   ext_modules = ext_modules,
