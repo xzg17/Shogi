@@ -24,13 +24,13 @@ static PyObject *my_debug(Py_Class_Board *self);
 
 static PyMethodDef Py_Class_Board_methods[] = {
     {"ply", (PyCFunction)Board_ply, METH_VARARGS, "(^o^)v"},
-    {"moves", (PyCFunction)Board_moves, METH_VARARGS, "(ToT)"},
-    {"push", (PyCFunction)Board_push, METH_VARARGS, "(^o^)v"},
-    {"pop", (PyCFunction)Board_pop, METH_VARARGS, "(ToT)/\(^o^)v"},
-    {"is_checked", (PyCFunction)Board_is_checked, METH_VARARGS, "{O_O}"},
-    {"turn", (PyCFunction)Board_turn, METH_VARARGS, "\(-A-)/"},
-    {"history", (PyCFunction)Board_history, METH_VARARGS, "v(^o^)"},
-    {"is_end", (PyCFunction)is_end, METH_VARARGS, "v(^o^)"},
+    //{"moves", (PyCFunction)Board_moves, METH_VARARGS, "(ToT)"},
+    //{"push", (PyCFunction)Board_push, METH_VARARGS, "(^o^)v"},
+    //{"pop", (PyCFunction)Board_pop, METH_VARARGS, "(ToT)/\(^o^)v"},
+    //{"is_checked", (PyCFunction)Board_is_checked, METH_VARARGS, "{O_O}"},
+    //{"turn", (PyCFunction)Board_turn, METH_VARARGS, "\(-A-)/"},
+    //{"history", (PyCFunction)Board_history, METH_VARARGS, "v(^o^)"},
+    //{"is_end", (PyCFunction)is_end, METH_VARARGS, "v(^o^)"},
     //{"debug", (PyCFunction)my_debug, METH_VARARGS, "(x_x)"},
     {NULL} /* Sentinel */
 };
@@ -52,7 +52,7 @@ static PyTypeObject CustomType = {
     0,                        /* tp_as_mapping */
     0,                        /* tp_hash */
     0,                        /* tp_call */
-    (reprfunc)*Board_str,     /* tp_str */
+    0,                        /* tp_str */
     0,                        /* tp_getattro */
     0,                        /* tp_setattro */
     0,                        /* tp_as_buffer */
@@ -72,7 +72,7 @@ static PyTypeObject CustomType = {
     0,                        /* tp_descr_get */
     0,                        /* tp_descr_set */
     0,                        /* tp_dictoffset */
-    (initproc)Dummy_init,     /* tp_init */
+    (initproc)Board_init,     /* tp_init */
     0,                        /* tp_alloc */
     PyType_GenericNew,        /* tp_new */
 };
