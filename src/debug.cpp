@@ -82,7 +82,7 @@ static PyModuleDef custommodule = {
 };
 
 PyMODINIT_FUNC
-PyInit_np_nd_DIDS(void){
+PyInit_Board(void){
     PyObject *m;
     
     m = PyModule_Create(&custommodule);
