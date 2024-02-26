@@ -11,7 +11,8 @@ typedef struct {
 
 static int Board_init(Py_Class_Board *self, PyObject *args);
 
-static PyObject *my_debug(Py_Class_Board *self, PyObject *args){
+static PyObject *my_debug(Py_Class_Board *self, void *closure) {
+    // Your function implementation here
     Py_INCREF(Py_None);
     return Py_None;
 };
@@ -79,10 +80,9 @@ static int Board_init(Py_Class_Board *self, PyObject *args) {
     }
 
     return 0;
-}
+};
 
 
-//一旦ここまで
 static PyModuleDef custommodule = {
     PyModuleDef_HEAD_INIT,
     "_board",
