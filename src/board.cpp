@@ -9,6 +9,7 @@ typedef struct {
         Board *board;
 } Py_Class_Board;
 
+static int *Board_init(Py_Class_Board *self, PyObject *args);
 
 static PyObject *Board_ply(Py_Class_Board *self);
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args);
@@ -17,20 +18,13 @@ static PyObject *Board_is_checked(Py_Class_Board *self);
 static PyObject *Board_turn(Py_Class_Board *self);
 static PyObject *Board_history(Py_Class_Board *self);
 static PyObject *is_end(Py_Class_Board *self);
-static PyObject *my_debug1(Py_Class_Board *self);
 
+static PyObject *my_debug(Py_Class_Board *self);
 
-static int *Board_init(Py_Class_Board *self, PyObject *args);
-static PyObject *Board_str(Py_Class_Board *self);
-
-static PyObject *my_debug1(Py_Class_Board *self){
-    return Py_BuildValue("[ii]", 0, 0);
-};
 
 static PyMethodDef Py_Class_Board_methods[] = {
+    {"ply", (PyCFunction)Board_ply, METH_VARARGS, "(^o^)v"},
     {"moves", (PyCFunction)Board_moves, METH_VARARGS, "(ToT)"},
-    {"catch", (PyCFunction)catch_moves, METH_VARARGS, "(^o^)v"},
-    {"tesu", (PyCFunction)get_tesu, METH_VARARGS, "(^o^)v"},
     {"set_tesu", (PyCFunction)set_tesu, METH_VARARGS, "(^o^)v"},
     {"catch_or_moves", (PyCFunction)catch_or_moves, METH_VARARGS, "(ToT)/\(^o^)v"},
     {"rotate", (PyCFunction)rotate_board, METH_VARARGS, "(^q^)"},
@@ -40,7 +34,7 @@ static PyMethodDef Py_Class_Board_methods[] = {
     {"get_info", (PyCFunction)get_information, METH_VARARGS, "v(^o^)"},
     {"get_board", (PyCFunction)get_board, METH_VARARGS, "v(^o^)"},
     {"next_player", (PyCFunction)next_player, METH_VARARGS, "(-_-)?"},
-    //{"debug", (PyCFunction)my_debug1, METH_VARARGS, "(x_x)"},
+    //{"debug", (PyCFunction)my_debug, METH_VARARGS, "(x_x)"},
     {NULL} /* Sentinel */
 };
 
@@ -155,124 +149,32 @@ static PyObject *Board_history(Py_Class_Board *self){
     }
     return py_history;
 };
-//一旦ここまで
-static PyObject *is_end(Py_Class_Board *self);
-static PyObject *my_debug1(Py_Class_Board *self);
-//*/
 static PyObject *is_end(Py_Class_Board *self){
-    return Py_BuildValue("i", self->board->is_end());
+    std::set<int*> c_moves = self->board->legal_moves();
+    if(c_moves.size() == 0){
+        return Py_BuildValue("i", 1);
+    }else{
+        return Py_BuildValue("i", 0);
+    };
+};
+static PyObject *my_debug(Py_Class_Board *self){
+    return Py_BuildValue("i", 0);
 };
 
-static PyObject *next_player(Py_Class_Board *self){
-    return Py_BuildValue("i", self->board->next_player());
-};
-
-static int *Dummy_init(Py_Class_Board *self, PyObject *args){
-    int next;
-    PyObject *pyboard;
-    if (!PyArg_ParseTuple(args, "Oi", &pyboard, &next)) {
+static int *Board_init(Py_Class_Board *self, PyObject *args){
+    if(args != NULL){
         PyErr_SetString(PyExc_ValueError, "InitError1!");
         return NULL;
-    }
-    
-    if (PyList_Check(pyboard)) {
-        if(PyList_Size(pyboard)!=14){
-            PyErr_SetString(PyExc_ValueError, "InitError3!");
-            return NULL;
-        }
-        int cboard[14]={
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 0)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 1)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 2)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 3)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 4)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 5)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 6)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 7)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 8)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard, 9)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard,10)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard,11)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard,12)),
-            (int)PyLong_AsLong(PyList_GetItem(pyboard,13))
-        };
-        self->board=new Board(cboard, next);
-    }
-    if (PyTuple_Check(pyboard)) {
-        if(PyTuple_Size(pyboard)!=14){
-            PyErr_SetString(PyExc_ValueError, "InitError3!");
-            return NULL;
-        }
-        int cboard[14]={
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 0)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 1)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 2)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 3)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 4)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 5)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 6)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 7)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 8)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 9)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 10)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 11)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 12)),
-            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 13))
-        };
-        self->board=new Board(cboard, next);
-    }
-    int end=1;
-    if(self->board->board[0]==1){
-        end=0;
-    }
-    if(self->board->board[1]==1){
-        end=0;
-    }
-    if(self->board->board[2]==1){
-        end=0;
-    }
-    if(self->board->board[3]==1){
-        end=0;
-    }
-    if(self->board->board[4]==1){
-        end=0;
-    }
-    if(self->board->board[5]==1){
-        end=0;
-    }
-    if(self->board->board[6]==1){
-        end=0;
-    }
-    if(self->board->board[7]==1){
-        end=0;
-    }
-    if(self->board->board[8]==1){
-        end=0;
-    }
-    if(self->board->board[9]==1){
-        end=0;
-    }
-    if(self->board->board[10]==1){
-        end=0;
-    }
-    if(self->board->board[11]==1){
-        end=0;
-    }
-    if(self->board->board[12]==1){
-        end=0;
-    }
-    if(self->board->board[13]==1){
-        end=0;
-    }
-    if(end){
-        self->board->end=1;
-    }
+    };
+    self->board=new Board();
     return 0;
 };
 
+
+//一旦ここまで
 static PyModuleDef custommodule = {
     PyModuleDef_HEAD_INIT,
-    "np_nd_DIDS",
+    "Board",
     "Example module that creates an extension type.",
     -1,
     NULL
@@ -292,317 +194,7 @@ PyInit_np_nd_DIDS(void){
     }
 
     Py_INCREF(&CustomType);
-    PyModule_AddObject(m, "DIBoard", (PyObject *) &CustomType);
+    PyModule_AddObject(m, "Board", (PyObject *) &CustomType);
 
     return m;
-};
-
-static PyObject *catch_moves(Py_Class_Board *self){
-    int board[14]={
-        self->board->board[0],
-        self->board->board[1],
-        self->board->board[2],
-        self->board->board[3],
-        self->board->board[4],
-        self->board->board[5],
-        self->board->board[6],
-        self->board->board[7],
-        self->board->board[8],
-        self->board->board[9],
-        self->board->board[10],
-        self->board->board[11],
-        self->board->board[12],
-        self->board->board[13]
-    };
-    int i,j;
-    for(i=0;i<14;i++){
-        int p=board[i];
-        if(0<p){
-            if(p<3){
-                if(p==1){
-                    for(j=0;j<13;j++){
-                        p=lion[i][j];
-                        if(p+1){
-                            if((board[p]==-1)){
-                                return Py_BuildValue("i",i*14+p);
-                            }
-                        }else{
-                            break;
-                        }
-                    };
-                }else{
-                    for(j=0;j<4;j++){
-                        p=jiraffe[i][j];
-                        if(p+1){
-                            if((board[p]==-1)){
-                                return Py_BuildValue("i",i*14+p);
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }else{
-                if(5-p){
-                    if(4-p){
-                        for(j=0;j<4;j++){
-                            p=elephant[i][j];
-                            if(p+1){
-                                if((board[p]==-1)){
-                                    return Py_BuildValue("i",i*14+p);
-                                }
-                            }else{
-                                break;
-                            }
-                        }
-                    }else{
-                        p=chick[i][0];
-                        if(p+1){
-                            if((board[p]==-1)){
-                                return Py_BuildValue("i",i*14+p);
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }else{
-                    for(j=0;j<6;j++){
-                        p=hen[i][j];
-                        if(p+1){
-                            if((board[p]==-1)){
-                                return Py_BuildValue("i",i*14+p);
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return Py_BuildValue("i",-1);
-};
-//*/
-
-static PyObject *get_information(Py_Class_Board *self){
-    int board[14]={
-        self->board->board[0],
-        self->board->board[1],
-        self->board->board[2],
-        self->board->board[3],
-        self->board->board[4],
-        self->board->board[5],
-        self->board->board[6],
-        self->board->board[7],
-        self->board->board[8],
-        self->board->board[9],
-        self->board->board[10],
-        self->board->board[11],
-        self->board->board[12],
-        self->board->board[13]
-    };
-    int i,j;
-    int info[14]={-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9,-9};
-    for(i=0;i<14;i++){
-        int p=board[i];
-        if(0<p){
-            info[i]=board[i];
-            if(p<3){
-                if(p==1){
-                    for(j=0;j<13;j++){
-                        p=lion[i][j];
-                        if(p+1){
-                            info[p]=board[p];
-                        }else{
-                            break;
-                        }
-                    };
-                }else{
-                    for(j=0;j<4;j++){
-                        p=jiraffe[i][j];
-                        if(p+1){
-                            info[p]=board[p];
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }else{
-                if(5-p){
-                    if(4-p){
-                        for(j=0;j<4;j++){
-                            p=elephant[i][j];
-                            if(p+1){
-                                info[p]=board[p];
-                            }else{
-                                break;
-                            }
-                        }
-                    }else{
-                        p=chick[i][0];
-                        if(p+1){
-                            info[p]=board[p];
-                        }else{
-                            break;
-                        }
-                    }
-                }else{
-                    for(j=0;j<6;j++){
-                        p=hen[i][j];
-                        if(p+1){
-                            info[p]=board[p];
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    return Py_BuildValue(
-        "(iiiiiiiiiiiiii)",
-        info[0],
-        info[1],info[2],info[3],
-        info[4],info[5],info[6],
-        info[7],info[8],info[9],
-        info[10],info[11],info[12],
-        info[13]
-    );
-};
-
-static PyObject *get_board(Py_Class_Board *self){
-    return Py_BuildValue(
-        "(iiiiiiiiiiiiii)",
-        self->board->board[0],
-        self->board->board[1],
-        self->board->board[2],
-        self->board->board[3],
-        self->board->board[4],
-        self->board->board[5],
-        self->board->board[6],
-        self->board->board[7],
-        self->board->board[8],
-        self->board->board[9],
-        self->board->board[10],
-        self->board->board[11],
-        self->board->board[12],
-        self->board->board[13]
-    );
-};
-
-static PyObject *catch_or_moves(Py_Class_Board *self){
-    int board[14]={
-        self->board->board[0],
-        self->board->board[1],
-        self->board->board[2],
-        self->board->board[3],
-        self->board->board[4],
-        self->board->board[5],
-        self->board->board[6],
-        self->board->board[7],
-        self->board->board[8],
-        self->board->board[9],
-        self->board->board[10],
-        self->board->board[11],
-        self->board->board[12],
-        self->board->board[13]
-    };
-    int moves[48];
-    int i,j,m;
-    m=0;
-    for(i=0;i<14;i++){
-        int p=board[i];
-        if(0<p){
-            if(p<3){
-                if(p==1){
-                    for(j=0;j<13;j++){
-                        p=lion[i][j];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                if(board[p]+1){
-                                    moves[m]=i*14+p;
-                                    m++;
-                                }else{
-                                    return Py_BuildValue("[i]", i*14+p);
-                                }
-                            }
-                        }else{
-                            break;
-                        }
-                    };
-                }else{
-                    for(j=0;j<4;j++){
-                        p=jiraffe[i][j];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                if(board[p]+1){
-                                    moves[m]=i*14+p;
-                                    m++;
-                                }else{
-                                    return Py_BuildValue("[i]", i*14+p);
-                                }
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }else{
-                if(5-p){
-                    if(4-p){
-                        for(j=0;j<4;j++){
-                            p=elephant[i][j];
-                            if(p+1){
-                                if((board[p]<=0)){
-                                    if(board[p]+1){
-                                        moves[m]=i*14+p;
-                                        m++;
-                                    }else{
-                                        return Py_BuildValue("[i]", i*14+p);
-                                    }
-                                }
-                            }else{
-                                break;
-                            }
-                        }
-                    }else{
-                        p=chick[i][0];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                if(board[p]+1){
-                                    moves[m]=i*14+p;
-                                    m++;
-                                }else{
-                                    return Py_BuildValue("[i]", i*14+p);
-                                }
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }else{
-                    for(j=0;j<6;j++){
-                        p=hen[i][j];
-                        if(p+1){
-                            if((board[p]<=0)){
-                                if(board[p]+1){
-                                    moves[m]=i*14+p;
-                                    m++;
-                                }else{
-                                    return Py_BuildValue("[i]", i*14+p);
-                                }
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    PyObject *move_list = PyList_New(m);
-    for(int i=0;i<m;i++){
-        PyList_SET_ITEM(move_list, i, PyLong_FromLong((long)moves[i]));
-    }
-    return move_list;
 };
