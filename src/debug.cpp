@@ -23,16 +23,16 @@ static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
         return NULL;
     };
     if(PyList_Check(move)){
-        if(PyList_Size(move)!=3){
+        if(PyList_Size(move) != 3){
             PyErr_SetString(PyExc_ValueError, "Invalid arguments");
             return NULL;
-        }
+        };
         int c_move[3]={
             (int)PyLong_AsLong(PyList_GetItem(move, 0)),
             (int)PyLong_AsLong(PyList_GetItem(move, 1)),
             (int)PyLong_AsLong(PyList_GetItem(move, 2))
         };
-        self->board->push(move);
+        self->board->push(c_move);
     }/*else if(PyTuple_Check(move)){
         if(PyTuple_Size(move)!=3){
             PyErr_SetString(PyExc_ValueError, "InitError_list2!");
