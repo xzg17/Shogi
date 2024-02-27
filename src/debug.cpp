@@ -15,6 +15,41 @@ static PyObject *Board_ply(Py_Class_Board *self){
     return Py_BuildValue("i", self->board->ply());
 };
 
+
+static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
+    PyObject *move;
+    if(!PyArg_ParseTuple(args, "O", &move)){
+        PyErr_SetString(PyExc_ValueError, "PushError1!");
+        return NULL;
+    };
+    if(PyList_Check(pyboard)){
+        if(PyList_Size(pyboard)!=3){
+            PyErr_SetString(PyExc_ValueError, "InitError_list2!");
+            return NULL;
+        }
+        int c_move[3]={
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 0)),
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 1)),
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 2))
+        };
+        self->board->push(move);
+    };
+    if(PyTuple_Check(pyboard)){
+        if(PyTuple_Size(pyboard)!=3){
+            PyErr_SetString(PyExc_ValueError, "InitError_list2!");
+            return NULL;
+        }
+        int c_move[3]={
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 0)),
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 1)),
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 2))
+        };
+        self->board->push(move);
+    };
+    Py_INCREF(Py_None);
+    return Py_None;
+};
+
 static PyMethodDef Py_Class_Board_methods[] = {
     {"ply", (PyCFunction)Board_ply, METH_VARARGS, "(^o^)v"},
     {NULL} /* Sentinel */
