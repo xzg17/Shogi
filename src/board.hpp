@@ -18,6 +18,7 @@ class Board{
         //turn 手番
         //hand[0~6] 先手持駒
         //hand[7~13] 後手持駒
+        this->turn = 1;
         int i;
         for(i = 0;i < 100;i++){
             this->board[i] = init_board[i];
