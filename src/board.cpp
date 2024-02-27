@@ -12,6 +12,7 @@ typedef struct {
 static int Board_init(Py_Class_Board *self, PyObject *args);
 
 static PyObject *Board_ply(Py_Class_Board *self);
+static PyObject *Board_legal_moves(Py_Class_Board *self);
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args);
 static PyObject *Board_pop(Py_Class_Board *self);
 static PyObject *Board_is_checked(Py_Class_Board *self);
@@ -82,6 +83,10 @@ static PyObject *Board_ply(Py_Class_Board *self){
     return Py_BuildValue("i", self->board->ply());
 };
 
+
+static PyObject *Board_legal_moves(Py_Class_Board *self){
+    return Py_buildValue("i", 1);
+};
 
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
     PyObject *move;
