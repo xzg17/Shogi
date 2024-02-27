@@ -90,7 +90,7 @@ static PyObject *Board_legal_moves(Py_Class_Board *self){
     PyObject *py_moves = PySet_New(NULL);
     for(auto move:moves){
         PyObject *py_move = Py_BuildValue("(iii)", move[0], move[1], move[2]);
-        //PySET_ADD(py_moves, py_move);
+        PySET_ADD(py_moves, py_move);
     };
     return Py_BuildValue("i", 1);
 };
