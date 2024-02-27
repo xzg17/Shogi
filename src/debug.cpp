@@ -64,7 +64,7 @@ static PyTypeObject CustomType = {
 
 
 static int Board_init(Py_Class_Board *self, PyObject *args){
-    if(args != NULL){
+    if(!PyArg_ParseTuple(args, "")){
         PyErr_BadArgument();
         //PyErr_SetString(PyExc_ValueError, "InitError1!");
         return -1;
