@@ -5,12 +5,13 @@
 #include <stack>
 
 class Board{
+    private:
     int board[100];
-    int turn;
     int hand[14];
-    std::stack<int*> history;//棋譜
-    std::stack<int> get_pieces;//pop用補助
+    std::stack<int*> history;
+    std::stack<int> get_pieces;
     public:
+    int turn;
     Board(){
         //board[0～10] 空欄
         //board[11～99] 盤面
