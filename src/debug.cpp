@@ -15,18 +15,13 @@ static PyObject *Board_ply(Py_Class_Board *self){
     return Py_BuildValue("i", self->board->ply());
 };
 
-
-static PyObject *Board_history(Py_Class_Board *self){
-    std::stack<int*> c_history = self->board->history;
-    int m = c_history.size();
-    PyObject *py_history = PyList_New(m);
-    for(int i=0;i<m;i++){
-        int *c_move = c_history.top();
-        c_history.pop();
-        PyObject *move = Py_BuildValue("(iii)", c_move[0], c_move[1], c_move[2]);
-        PyList_SET_ITEM(py_history, i, move);
-    }
-    return py_history;
+static PyObject *is_end(Py_Class_Board *self){
+    std::set<int*> c_moves = self->board->legal_moves();
+    if(c_moves.size() == 0){
+        return Py_BuildValue("i", 1);
+    }else{
+        return Py_BuildValue("i", 0);
+    };
 };
 
 static PyMethodDef Py_Class_Board_methods[] = {
