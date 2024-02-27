@@ -64,7 +64,9 @@ static PyTypeObject CustomType = {
 
 
 static int Board_init(Py_Class_Board *self, PyObject *args){
-
+    if(args != NULL){
+        return -1;
+    };
     self->board = new Board(); // Allocate memory for a new Board object
 
     return 0;
