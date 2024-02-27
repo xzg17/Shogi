@@ -171,14 +171,14 @@ static int *Board_init(Py_Class_Board *self, PyObject *args){
 //一旦ここまで
 static PyModuleDef custommodule = {
     PyModuleDef_HEAD_INIT,
-    "Board",
+    "_board",
     "Example module that creates an extension type.",
     -1,
     NULL
 };
 
 PyMODINIT_FUNC
-PyInit_np_nd_DIDS(void){
+PyInit__board(void){
     PyObject *m;
     
     m = PyModule_Create(&custommodule);
