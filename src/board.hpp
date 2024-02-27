@@ -165,7 +165,6 @@ class Board{
             }else{
                 return emp;
             };
-            int move_from = move[0];
             return move;
         };
     };
