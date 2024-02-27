@@ -16,13 +16,8 @@ static PyObject *Board_ply(Py_Class_Board *self){
 };
 
 
-static PyObject *Board_is_checked(Py_Class_Board *self){
-    if(self->board->turn == 1){
-        return Py_BuildValue("i", self->board->is_check_bking());
-    }else if(self->board->turn == -1){
-        return Py_BuildValue("i", self->board->is_check_wking());
-    }
-    return Py_BuildValue("i", -1);
+static PyObject *Board_turn(Py_Class_Board *self){
+    return Py_BuildValue("i", self->board->turn);
 };
 
 static PyMethodDef Py_Class_Board_methods[] = {
