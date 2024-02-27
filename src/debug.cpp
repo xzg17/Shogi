@@ -15,9 +15,14 @@ static PyObject *Board_ply(Py_Class_Board *self){
     return Py_BuildValue("i", self->board->ply());
 };
 
-static PyObject *Board_pop(Py_Class_Board *self){
-    int *c_move = self->board->pop();
-    return Py_BuildValue("(iii)", c_move[0], c_move[1], c_move[2]);
+
+static PyObject *Board_is_checked(Py_Class_Board *self){
+    if(self->board->turn == 1){
+        return Py_BuildValue("i", self->board->is_check_bking());
+    }else if(self->board->turn == -1){
+        return Py_BuildValue("i", self->board->is_check_wking());
+    }
+    return Py_BuildValue("i", -1);
 };
 
 static PyMethodDef Py_Class_Board_methods[] = {
