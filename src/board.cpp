@@ -24,8 +24,8 @@ static PyObject *my_debug(Py_Class_Board *self);
 
 static PyMethodDef Py_Class_Board_methods[] = {
     {"ply", (PyCFunction)Board_ply, METH_VARARGS, "(^o^)v"},
-    {"moves", (PyCFunction)Board_moves, METH_VARARGS, "(ToT)"},
-    {"push", (PyCFunction)Board_push, METH_VARARGS, "(^o^)v"},
+    //{"moves", (PyCFunction)Board_moves, METH_VARARGS, "(ToT)"},
+    //{"push", (PyCFunction)Board_push, METH_VARARGS, "(^o^)v"},
     //{"pop", (PyCFunction)Board_pop, METH_VARARGS, "(ToT)/\(^o^)v"},
     //{"is_checked", (PyCFunction)Board_is_checked, METH_VARARGS, "{O_O}"},
     //{"turn", (PyCFunction)Board_turn, METH_VARARGS, "\(-A-)/"},
