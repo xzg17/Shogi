@@ -95,6 +95,15 @@ static PyObject *Board_legal_moves(Py_Class_Board *self){
     return py_moves;
 };
 
+static PyObject *Board_get(Py_Class_Board *self, PyObject *args){
+    int i;
+    if(!PyArg_ParseTuple(args, "i", i)){
+        PyErr_SetString(PyExc_TypeError, "Board.get() takes exactly one argument");
+        return NULL;
+    };
+    return Py_BuildValue("i", -1);
+};
+
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
     PyObject *move;
     if(!PyArg_ParseTuple(args, "O", &move)){
