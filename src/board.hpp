@@ -8,9 +8,9 @@ class Board{
     private:
     int board[100];
     int hand[14];
-    std::stack<int*> history;
     std::stack<int> get_pieces;
     public:
+    std::stack<int*> history;
     int turn;
     Board(){
         //board[0～10] 空欄
