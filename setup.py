@@ -6,7 +6,7 @@ os.environ['CC'] = 'gcc'
 src_dir = 'src'
 
 ext_modules = []
-ext_modules.append(Extension('_board',[src_dir + '/debug.cpp']))
+ext_modules.append(Extension('_board',[src_dir + '/board.cpp']))
 setup(
   name='Shogi',
   ext_modules = ext_modules,
