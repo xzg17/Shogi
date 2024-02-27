@@ -19,12 +19,12 @@ static PyObject *Board_ply(Py_Class_Board *self){
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
     PyObject *move;
     if(!PyArg_ParseTuple(args, "O", &move)){
-        PyErr_SetString(PyExc_ValueError, "Board.push() takes exactly one argument");
+        PyErr_SetString(PyExc_TypeError, "Board.push() takes exactly one argument");
         return NULL;
     };
     if(PyList_Check(move)){
         if(PyList_Size(move) != 3){
-            PyErr_SetString(PyExc_ValueError, "Invalid arguments");
+            PyErr_SetString(PyExc_TypeError, "Invalid arguments");
             return NULL;
         };
         int c_move[3]={
@@ -35,7 +35,7 @@ static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
         self->board->push(c_move);
     }else if(PyTuple_Check(move)){
         if(PyTuple_Size(move)!=3){
-            PyErr_SetString(PyExc_ValueError, "InitError_list2!");
+            PyErr_SetString(PyExc_TypeError, "InitError_list2!");
             return NULL;
         }
         int c_move[3]={
@@ -44,7 +44,7 @@ static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
             (int)PyLong_AsLong(PyTuple_GetItem(move, 2))
         };
         self->board->push(c_move);
-    };*/
+    };
     Py_INCREF(Py_None);
     return Py_None;
 };
