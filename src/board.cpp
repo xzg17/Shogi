@@ -85,7 +85,9 @@ static PyObject *Board_ply(Py_Class_Board *self){
 
 
 static PyObject *Board_legal_moves(Py_Class_Board *self){
-    std::set<int*> moves;
+    std::set<int*> moves = self->board->legal_moves();
+    int m = moves.size();
+    PyObject *py_moves = PyList_New(m);
     return Py_BuildValue("i", 1);
 };
 
