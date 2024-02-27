@@ -31,6 +31,14 @@ class Board{
     int ply(){
         return this->history.size();
     };
+
+    int get(int i){
+        if(0 < i < 100){
+            return this->board[i];
+        }else{
+            return -1;
+        };
+    };
     
     int push(int *move){
         if(move[2] != 2){
