@@ -1,6 +1,6 @@
 #ifndef _BOARD_HPP_
 #define _BOARD_HPP_
-#include <piece.hpp>
+#include "piece.hpp"
 #include <set>
 #include <stack>
 
