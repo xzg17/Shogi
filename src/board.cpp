@@ -84,9 +84,6 @@ static PyObject *Board_ply(Py_Class_Board *self){
 };
 
 
-static PyObject *Board_legal_moves(Py_Class_Board *self){
-    return Py_buildValue("i", 1);
-};
 
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
     PyObject *move;
