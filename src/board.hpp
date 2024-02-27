@@ -113,16 +113,60 @@ class Board{
         this->history.push(move);
         this->turn *= -1;
     };
-    int pop(){
+    int *pop(){
+        int emp[3] = {-1, -1, -1};
         if(this->history.size() == 0){
-            return 0;
+            return emp;
         }else{
             int piece = this->get_pieces.top();
             int *move = this->history.top();
             this->get_pieces.pop();
             this->history.pop();
-            //To Do
-            return 0;
+            int move_from = move[0]; //or piece
+            int move_to = move[1];
+            int move_type = move[2];
+            if(move_type == 0){
+                this->board[move_from] = this->board[move_to];
+                this->board[move_to] = piece;
+            }else if(move_type == 1){
+                this->board[move_from] = this->board[move_to] - 8;
+                this->board[move_to] = piece;
+            }else if(move_type == 2){
+                this->board[move_to] = EMPTY;
+                if(move_from == B_ROOK){
+                    hand[0] += 1;
+                }else if(move_from == B_BISHOP){
+                    hand[1] += 1;
+                }else if(move_from == B_GOLD){
+                    hand[2] += 1;
+                }else if(move_from == B_SILVER){
+                    hand[3] += 1;
+                }else if(move_from == B_KNIGHT){
+                    hand[4] += 1;
+                }else if(move_from == B_LANCE){
+                    hand[5] += 1;
+                }else if(move_from == B_PAWN){
+                    hand[6] += 1;
+                }else if(move_from == W_ROOK){
+                    hand[7] += 1;
+                }else if(move_from == W_BISHOP){
+                    hand[8] += 1;
+                }else if(move_from == W_GOLD){
+                    hand[9] += 1;
+                }else if(move_from == W_SILVER){
+                    hand[10] += 1;
+                }else if(move_from == W_KNIGHT){
+                    hand[11] += 1;
+                }else if(move_from == W_LANCE){
+                    hand[12] += 1;
+                }else if(move_from == W_PAWN){
+                    hand[13] += 1;
+                };
+            }else{
+                return emp;
+            };
+            int move_from = move[0];
+            return move;
         };
     };
 
