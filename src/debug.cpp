@@ -22,6 +22,29 @@ static PyObject *Board_push(Py_Class_Board *self, PyObject *args){
         PyErr_SetString(PyExc_ValueError, "Board.push() takes exactly one argument");
         return NULL;
     };
+    if(PyList_Check(move)){
+        if(PyList_Size(move)!=3){
+            PyErr_SetString(PyExc_ValueError, "Invalid arguments");
+            return NULL;
+        }
+        int c_move[3]={
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 0)),
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 1)),
+            (int)PyLong_AsLong(PyList_GetItem(pyboard, 2))
+        };
+        self->board->push(move);
+    }else if(PyTuple_Check(move)){
+        if(PyTuple_Size(move)!=3){
+            PyErr_SetString(PyExc_ValueError, "InitError_list2!");
+            return NULL;
+        }
+        int c_move[3]={
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 0)),
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 1)),
+            (int)PyLong_AsLong(PyTuple_GetItem(pyboard, 2))
+        };
+        self->board->push(move);
+    };
     Py_INCREF(Py_None);
     return Py_None;
 };
