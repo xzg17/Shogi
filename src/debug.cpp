@@ -15,7 +15,10 @@ static PyObject *Board_ply(Py_Class_Board *self){
     return Py_BuildValue("i", self->board->ply());
 };
 
-
+static PyObject *Board_pop(Py_Class_Board *self){
+    int *c_move = self->board->pop();
+    return Py_BuildValue("(iii)", c_move[0], c_move[1], c_move[2]);
+};
 
 static PyMethodDef Py_Class_Board_methods[] = {
     {"ply", (PyCFunction)Board_ply, METH_VARARGS, "(^o^)v"},
