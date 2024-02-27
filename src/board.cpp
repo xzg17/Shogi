@@ -87,7 +87,7 @@ static PyObject *Board_ply(Py_Class_Board *self){
 static PyObject *Board_legal_moves(Py_Class_Board *self){
     std::set<int*> moves = self->board->legal_moves();
     int m = moves.size();
-    PyObject *py_moves = PySet_New();
+    //PyObject *py_moves = PySet_New();
     for(auto move:moves){
         PyObject *py_move = Py_BuildValue("(iii)", move[0], move[1], move[2]);
         //PySET_ADD(py_moves, py_move);
