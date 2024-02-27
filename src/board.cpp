@@ -9,7 +9,7 @@ typedef struct {
         Board *board;
 } Py_Class_Board;
 
-static int *Board_init(Py_Class_Board *self, PyObject *args);
+static int Board_init(Py_Class_Board *self, PyObject *args);
 
 static PyObject *Board_ply(Py_Class_Board *self);
 static PyObject *Board_push(Py_Class_Board *self, PyObject *args);
@@ -158,17 +158,12 @@ static PyObject *my_debug(Py_Class_Board *self){
     return Py_BuildValue("i", 0);
 };
 
-static int *Board_init(Py_Class_Board *self, PyObject *args){
-    if(args != NULL){
-        PyErr_SetString(PyExc_ValueError, "InitError1!");
-        return NULL;
-    };
+static int Board_init(Py_Class_Board *self, PyObject *args){
     self->board=new Board();
     return 0;
 };
 
 
-//一旦ここまで
 static PyModuleDef custommodule = {
     PyModuleDef_HEAD_INIT,
     "_board",
