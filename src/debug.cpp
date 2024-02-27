@@ -11,9 +11,7 @@ typedef struct {
 
 static int Board_init(Py_Class_Board *self, PyObject *args);
 
-static PyObject *Board_ply(Py_Class_Board *self){
-    PY_RETURN_NONE;
-};
+static PyObject *Board_ply(Py_Class_Board *self);
 
 static PyMethodDef Py_Class_Board_methods[] = {
     {NULL} /* Sentinel */
