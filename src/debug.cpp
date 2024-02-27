@@ -16,8 +16,17 @@ static PyObject *Board_ply(Py_Class_Board *self){
 };
 
 
-static PyObject *Board_turn(Py_Class_Board *self){
-    return Py_BuildValue("i", self->board->turn);
+static PyObject *Board_history(Py_Class_Board *self){
+    std::stack<int*> c_history = self->board->history;
+    int m = c_history.size();
+    PyObject *py_history = PyList_New(m);
+    for(int i=0;i<m;i++){
+        int *c_move = c_history.top();
+        c_history.pop();
+        PyObject *move = Py_BuildValue("(iii)", c_move[0], c_move[1], c_move[2]);
+        PyList_SET_ITEM(py_history, i, move);
+    }
+    return py_history;
 };
 
 static PyMethodDef Py_Class_Board_methods[] = {
